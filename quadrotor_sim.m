@@ -97,7 +97,7 @@ Q_cost(9,9) = 10; % psi
 %% plot settings
 linewidth = 1.5;
 
-sim_time = 6; % simulation runtime in seconds
+sim_time = 8; % simulation runtime in seconds
 
 animation_select = 0; % 0: no animation; 1: full motion, one central thrust vector
                       % 2: fixed at origin (only see angular position), one central thrust vector
