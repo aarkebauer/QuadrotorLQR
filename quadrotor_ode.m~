@@ -7,9 +7,8 @@
 function [dy] = quadrotor_ode(t,y)
 
 global T Tmax ts tmax m g M Ax Ay Az C J w1 w2 w3 w4 l k b Ixx Iyy Izz ...
-    R_cost Q_cost B P ...
-    w1_store w2_store w3_store w4_store t_store ...
-    phi_store theta_store psi_store
+    R_cost Q_cost ...
+    w1_store w2_store w3_store w4_store
 
 %%%%%%%%%%%% CALCULATE new w1-w4 USING QUADROTOR_PID.M %%%%%%%%%%%%
 %{
@@ -30,42 +29,44 @@ psi_dot = y(12)
 % quadrotor_pid(t,y(1),y(2),((T/m) * (cos(y(11))*sin(y(9))*cos(y(7)) + sin(y(11))*sin(y(7)))) - (1/m)*Ax*y(2),y(3),y(4),((T/m) * (sin(y(11))*sin(y(9))*cos(y(7)) - cos(y(11))*sin(y(7)))) - (1/m)*Ay*y(4),y(5),y(6),-g + ((T/m) * (cos(y(9))*cos(y(7)))) - (1/m)*Az*y(6),y(7),y(8),y(9),y(10),y(11),y(12));
 
 %% Determine optimal input u = [f_B, tau_x, tau_y, tau_z]';
-state = [y(1),y(3),y(5),y(2),y(4),y(6),y(7),y(9),y(11),y(8),y(10),y(12)]';
-
+state = [y(1),y(3),y(5),y(2),
 % Algebraic Riccati Equation
-% if mod(t,.1) < .001
-%     A = Amat(y(11));
-%     P = care(A,B,eye(12));
-% end
+A = Amat(psi);
+P = care(A,B,eye(12));
 
-u_opt = -(R_cost\(B')*P)*(state - desired_state(t));
-u_opt = u_opt + [m*g 0 0 0]'; % add the nominal input about which the system has been linearized
+u_opt = -[R_cost\B'*P]*[state - desired_state(t)]
 
-omega_opt_squared = M\u_opt;
-% don't allow motors to spin faster than their max rad/sec (~20,000 rpm)
-w1 = min([sqrt(omega_opt_squared(1)),2090]);
-w2 = min([sqrt(omega_opt_squared(2)),2090]);
-w3 = min([sqrt(omega_opt_squared(3)),2090]);
-w4 = min([sqrt(omega_opt_squared(4)),2090]);
 
 
 if mod(t,.03) < .001
     t
 end
 
-%% store angular velocities of rotors for plotting in quadrotor_sim.m
-t_store = [t_store t];
-w1_store = [w1_store w1];
-w2_store = [w2_store w2];
-w3_store = [w3_store w3];
-w4_store = [w4_store w4];
-phi_store = [phi_store y(7)];
-theta_store = [theta_store y(9)];
-psi_store = [psi_store y(11)];
+%% optimal control of altitude (z)
+if t < double(tmax)
+    if t < double(ts)
+        w1 = 2090;
+        w1_store(end) = w1;
+        w2 = 2090;
+        w2_store(end) = w2;
+        w3 = 2090;
+        w3_store(end) = w3;
+        w4 = 2090;
+        w4_store(end) = w4;
+    else
+        w1 = 0;
+        w1_store(end) = w1;
+        w2 = 0;
+        w2_store(end) = w2;
+        w3 = 0;
+        w3_store(end) = w3;
+        w4 = 0;
+        w4_store(end) = w4;
+    end
+end
 
 %% update combined forces of rotors create thrust T in direction of z-axis
 T = k*(w1^2 + w2^2 + w3^2 + w4^2);
-% T = k*(omega_opt_squared(1) + omega_opt_squared(2) + omega_opt_squared(3) + omega_opt_squared(4));
 
 %% update tauB used to calculate angular accelerations
 tauB(1) = l*k*(-w2^2 + w4^2); % for + rotor configuration (as opposed to x)
