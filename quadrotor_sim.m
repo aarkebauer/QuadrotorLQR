@@ -97,7 +97,7 @@ Q_cost(9,9) = 10; % psi
 %% plot settings
 linewidth = 1.5;
 
-sim_time = 8; % simulation runtime in seconds
+sim_time = 15; % simulation runtime in seconds
 
 animation_select = 0; % 0: no animation; 1: full motion, one central thrust vector
                       % 2: fixed at origin (only see angular position), one central thrust vector
@@ -242,7 +242,8 @@ time = [0, sim_time];
 % options = odeset('RelTol',1e-5,'AbsTol',1e-5,'Stats','on','MaxStep',.001);
 options = odeset('RelTol',1e-5,'AbsTol',1e-5,'Stats','on');
 % [t,y] = ode45(@quadrotor_ode,time,y,options);
-[t,y] = ode15s(@quadrotor_ode,time,y,options);
+% [t,y] = ode15s(@quadrotor_ode,time,y,options);
+[t,y] = ode23(@quadrotor_ode,time,y,options);
 
 % time = [0, double(tmax)];
 % options = odeset('RelTol',1e-5,'AbsTol',1e-5,'Stats','on','MaxStep',.001);
