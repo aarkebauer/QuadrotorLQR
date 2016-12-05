@@ -39,20 +39,20 @@ sigma = 2;
 mu = 5;
 amp = 100;
 
-% % % "normal dist path" folder (sim time = 11; time step = .02 - set increment of az in view_quad.m to 0.1) - START AT x0=0, y0=0, z0=0
-% % desired_x_sym(time_sym) = 100*(1/sqrt(2*sigma^2*pi))*exp(-(time_sym-6)^2/(2*sigma^2));
-% % desired_y_sym(time_sym) = 100*(1/sqrt(2*sigma^2*pi))*exp(-(time_sym-6)^2/(2*sigma^2));
-% % desired_z_sym(time_sym) = 100*(1/sqrt(2*sigma^2*pi))*exp(-(time_sym-6)^2/(2*sigma^2));
+% "normal dist path" folder (sim time = 11; time step = .02 - set increment of az in view_quad.m to 0.1) - START AT x0=0, y0=0, z0=0
+desired_x_sym(time_sym) = 100*(1/sqrt(2*sigma^2*pi))*exp(-(time_sym-6)^2/(2*sigma^2));
+desired_y_sym(time_sym) = 100*(1/sqrt(2*sigma^2*pi))*exp(-(time_sym-6)^2/(2*sigma^2));
+desired_z_sym(time_sym) = 100*(1/sqrt(2*sigma^2*pi))*exp(-(time_sym-6)^2/(2*sigma^2));
 
 % % % "with state observer" folder (sim time = 40; time step = .1) - START AT x0=0, y0=0, z0=0
 % % desired_y_sym(time_sym) = 6*sin(time_sym/5);
 % % desired_x_sym(time_sym) = 6*cos(time_sym/5)*sigmf(time_sym,[2,4]);
 % % desired_z_sym(time_sym) = time_sym/5 + cos(time_sym);
 
-% "step to a point" folder (sim time = 7; time step = .03) - START AT x0=0, y0=0, z0=0
-desired_x_sym(time_sym) = 3 + 0.0*time_sym;
-desired_y_sym(time_sym) = 3 + 0.0*time_sym;
-desired_z_sym(time_sym) = 3 + 0.0*time_sym;
+% % % "step to a point" folder (sim time = 7; time step = .03) - START AT x0=0, y0=0, z0=0
+% % desired_x_sym(time_sym) = 3 + 0.0*time_sym;
+% % desired_y_sym(time_sym) = 3 + 0.0*time_sym;
+% % desired_z_sym(time_sym) = 3 + 0.0*time_sym;
 
 % % % "spiral" folder (sim time = 8; time step = .1) - START AT x0=1, y0=0, z0=0
 % % desired_y_sym(time_sym) = sin(2*time_sym);

@@ -53,15 +53,15 @@ function view_quad(x,y,z,phi,theta,psi,t_fixed,time_step)
         x01 = x0+[0,0,0*T]; % thrust vector in center of body is hidden
         
         % positions of motors (row vectors) and thrust vectors in body
-        % frame (offset by some value along z-axis)
+        % frame (offset by some value along body z-axis)
         x1 = x0 + (R*[l,0,0]')';
-        x11 = x1+[0,0,(k*w1_store(ii)^2)];
+        x11 = x0 + (R*[l,0,(k*w1_store(ii)^2)]')';
         x2 = x0 + (R*[0,-l,0]')';
-        x21 = x2+[0,0,(k*w2_store(ii)^2)];
+        x21 = x0 + (R*[0,-l,(k*w2_store(ii)^2)]')';
         x3 = x0 + (R*[-l,0,0]')';
-        x31 = x3+[0,0,(k*w3_store(ii)^2)];
+        x31 = x0 + (R*[-l,0,(k*w3_store(ii)^2)]')';
         x4 = x0 + (R*[0,l,0]')';
-        x41 = x4+[0,0,(k*w4_store(ii)^2)];
+        x41 = x0 + (R*[0,l,(k*w4_store(ii)^2)]')';
         
         positions(:,:,ii) = vertcat(x0,x01,x1,x11,x2,x21,x3,x31,x4,x41);
     end
@@ -131,7 +131,7 @@ function view_quad(x,y,z,phi,theta,psi,t_fixed,time_step)
 %             daspect(d);
 %         end
         % update viewpoint
-        az = az+.3;
+        az = az+.1;
         view(az, el);
         
         cla
