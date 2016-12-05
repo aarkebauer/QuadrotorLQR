@@ -44,9 +44,15 @@ amp = 100;
 
 %10+ 100*(1/sqrt(2*sigma^2*pi))*exp(-(time_sym-50)^2/(2*sigma^2));
 
+% "with state observer" folder (sim time = 40; time step = .1)
 desired_y_sym(time_sym) = 6*sin(time_sym/5);
 desired_x_sym(time_sym) = 6*cos(time_sym/5)*sigmf(time_sym,[2,4]);
 desired_z_sym(time_sym) = time_sym/5 + cos(time_sym);
+
+% % % "step to a point" folder (sim time = 7; time step = .03)
+% % desired_x_sym(time_sym) = 3 + 0.0*time_sym;
+% % desired_y_sym(time_sym) = 3 + 0.0*time_sym;
+% % desired_z_sym(time_sym) = 3 + 0.0*time_sym;
 
 % desired_y_sym(time_sym) = 0*time_sym;
 % desired_x_sym(time_sym) = 0*time_sym;
@@ -62,42 +68,12 @@ Q_cost(2,2) = 10; % y
 Q_cost(3,3) = 10; % z
 Q_cost(9,9) = 10; % psi
 
-%% PID Gains
-% % !!!! Only the Z gains have been tuned !!!!
-% K_i_z = .005;
-% K_p_z = 8.85*0.468;
-% K_d_z = 3*0.468;
-% 
-% K_i_phi = 2*10^-5;
-% K_p_phi = 12*10^-3;
-% K_d_phi = 8*10^-3;
-% 
-% K_i_theta = K_i_phi;
-% K_p_theta = K_p_phi;
-% K_d_theta = K_d_phi;
-% 
-% K_i_psi = .6*10^-6;
-% K_p_psi = 3*10^-3;
-% K_d_psi = 8*10^-3;
-% 
-% K_p_y = .12;
-% K_d_y = 1.6;
-% K_i_y = .1*10^-5;
-% 
-% % K_p_y = .013;
-% % K_d_y = .06;
-% % K_i_y = 1.1*10^-5;
-% 
-% 
-% K_p_x = K_p_y;
-% K_d_x = K_d_y;
-% K_i_x = K_i_y;
-
 %% plot settings
 linewidth = 1.5;
 
 
 sim_time = 40; % simulation runtime in seconds
+time_step = .1 % time increment for plotting
 
 animation_select = 0; % 0: no animation; 1: full motion, one central thrust vector
                       % 2: fixed at origin (only see angular position), one central thrust vector
@@ -261,7 +237,6 @@ options = odeset('RelTol',1e-5,'AbsTol',1e-5,'Stats','on');
 
 %% LINEAR INTERPOLATION TO FIXED TIME STEP TO REDUCE PLOTTING TIME
 % time_step = 0.05;
-time_step = .1
 times = 0:time_step:max(t); % times at which to update figure
 t_fixed = interp1(t,t,times);
 

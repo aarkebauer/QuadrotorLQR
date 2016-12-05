@@ -136,54 +136,59 @@ function view_quad(x,y,z,phi,theta,psi,t_fixed,time_step)
         cla
         
         % plot desired trajectory
-        plot3(desired_x(t_fixed),desired_y(t_fixed),desired_z(t_fixed), 'r', 'LineWidth', 1.5)
+        % plot point if desired trajectory is to move to a point, otherwise plot trajectory as a line
+        if desired_x(t_fixed(end)) ~= desired_x(t_fixed(1))
+            plot3(desired_x(t_fixed),desired_y(t_fixed),desired_z(t_fixed), 'r', 'LineWidth', 1.5)
+        else
+            plot3(desired_x(t_fixed(end)), desired_y(t_fixed(end)), desired_z(t_fixed(end)), 'r*', 'MarkerSize', 14)
+        end
         
         % plot center of mass
-        plot3(positions(1,1,ii), positions(1,2,ii), positions(1,3,ii), 'ko')
+        plot3(positions(1,1,ii), positions(1,2,ii), positions(1,3,ii), 'ko', 'MarkerSize', 14)
         
         % plot body thrust vector (hidden in this script)
         hold on
         plot3([positions(1,1,ii), positions(2,1,ii)], ...
             [positions(1,2,ii), positions(2,2,ii)], ...
-            [positions(1,3,ii), positions(2,3,ii)], 'g')
+            [positions(1,3,ii), positions(2,3,ii)], 'g', 'LineWidth', 2)
         
         % plot 4 motors
         hold on
-        plot3(positions(3,1,ii),positions(3,2,ii),positions(3,3,ii),'rx')
+        plot3(positions(3,1,ii),positions(3,2,ii),positions(3,3,ii),'rx', 'MarkerSize', 14)
         hold on
-        plot3(positions(5,1,ii),positions(5,2,ii),positions(5,3,ii),'rx')
+        plot3(positions(5,1,ii),positions(5,2,ii),positions(5,3,ii),'rx', 'MarkerSize', 14)
         hold on
-        plot3(positions(7,1,ii),positions(7,2,ii),positions(7,3,ii),'rx')
+        plot3(positions(7,1,ii),positions(7,2,ii),positions(7,3,ii),'rx', 'MarkerSize', 14)
         hold on
-        plot3(positions(9,1,ii),positions(9,2,ii),positions(9,3,ii),'rx')
+        plot3(positions(9,1,ii),positions(9,2,ii),positions(9,3,ii),'rx', 'MarkerSize', 14)
         
         % plot thrust vectors for each of 4 motors
         hold on
         plot3([positions(3,1,ii), positions(4,1,ii)], ...
             [positions(3,2,ii), positions(4,2,ii)], ...
-            [positions(3,3,ii), positions(4,3,ii)], 'g')
+            [positions(3,3,ii), positions(4,3,ii)], 'g', 'LineWidth', 2)
         hold on
         plot3([positions(5,1,ii), positions(6,1,ii)], ...
             [positions(5,2,ii), positions(6,2,ii)], ...
-            [positions(5,3,ii), positions(6,3,ii)], 'g')
+            [positions(5,3,ii), positions(6,3,ii)], 'g', 'LineWidth', 2)
         hold on
         plot3([positions(7,1,ii), positions(8,1,ii)], ...
             [positions(7,2,ii), positions(8,2,ii)], ...
-            [positions(7,3,ii), positions(8,3,ii)], 'g')
+            [positions(7,3,ii), positions(8,3,ii)], 'g', 'LineWidth', 2)
         hold on
         plot3([positions(9,1,ii), positions(10,1,ii)], ...
             [positions(9,2,ii), positions(10,2,ii)], ...
-            [positions(9,3,ii), positions(10,3,ii)], 'g')
+            [positions(9,3,ii), positions(10,3,ii)], 'g', 'LineWidth', 2)
         
         % plot black cross bars connecting motor 1 with 3 and 2 with 4
         hold on
         plot3([positions(3,1,ii), positions(7,1,ii)], ...
             [positions(3,2,ii), positions(7,2,ii)], ...
-            [positions(3,3,ii), positions(7,3,ii)], 'k')
+            [positions(3,3,ii), positions(7,3,ii)], 'k', 'LineWidth', 2)
         hold on
         plot3([positions(5,1,ii), positions(9,1,ii)], ...
             [positions(5,2,ii), positions(9,2,ii)], ...
-            [positions(5,3,ii), positions(9,3,ii)], 'k')
+            [positions(5,3,ii), positions(9,3,ii)], 'k', 'LineWidth', 2)
         grid on
         xlabel('x')
         ylabel('y')
