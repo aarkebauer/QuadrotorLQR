@@ -19,7 +19,7 @@ global T Tmax m g M Ax Ay Az C J l k b Ixx Iyy Izz w1 w2 w3 w4 ...
     desired_x desired_y desired_z ...
     desired_x_dot desired_y_dot desired_z_dot ...
     desired_x_ddot desired_y_ddot desired_z_ddot ...
-    B R_cost Q_cost P ...
+    B R_cost Q_cost P A l0 C_sys...
     phi_store theta_store psi_store ...
     w1_store w2_store w3_store w4_store t_store
 
@@ -44,14 +44,13 @@ amp = 100;
 
 %10+ 100*(1/sqrt(2*sigma^2*pi))*exp(-(time_sym-50)^2/(2*sigma^2));
 
-desired_y_sym(time_sym) = 6*sin(time_sym/5);
-desired_x_sym(time_sym) = 6*cos(time_sym/5)*sigmf(time_sym,[2,4]);
-% desired_z_sym(time_sym) = time_sym/5;
-%desired_x_sym(time_sym) = 0*time_sym;
-%desired_x_sym(time_sym) = 0.1+0*time_sym;
-%desired_y_sym(time_sym) = 0*time_sym;
-% desired_z_sym(time_sym) = 5 + cos(time_sym) + 1*time_sym;
-desired_z_sym(time_sym) = (1+cos(time_sym));
+% desired_y_sym(time_sym) = 6*sin(time_sym/5);
+% desired_x_sym(time_sym) = 6*cos(time_sym/5)*sigmf(time_sym,[2,4]);
+% desired_z_sym(time_sym) = (1+cos(time_sym));
+
+desired_y_sym(time_sym) = 0*time_sym;
+desired_x_sym(time_sym) = 0*time_sym;
+desired_z_sym(time_sym) = 1 + 0*time_sym;
 
 %% LQR cost matrices
 R_cost = eye(4)*.1;
@@ -98,7 +97,7 @@ Q_cost(9,9) = 10; % psi
 linewidth = 1.5;
 
 
-sim_time = 100; % simulation runtime in seconds
+sim_time = 5; % simulation runtime in seconds
 
 animation_select = 0; % 0: no animation; 1: full motion, one central thrust vector
                       % 2: fixed at origin (only see angular position), one central thrust vector
@@ -231,31 +230,34 @@ B(12,4) = 1/Izz;
 A = Amat(y(11));
 P = care(A,B,eye(12));
     
-%% RUN SIMULATION
+%% RUN SIMULATION WITHOUT OBSERVER
+% 
+% time = [0, sim_time];
+% % options = odeset('RelTol',1e-5,'AbsTol',1e-5,'Stats','on','MaxStep',.001);
+% options = odeset('RelTol',1e-5,'AbsTol',1e-5,'Stats','on');
+% % [t,y] = ode45(@quadrotor_ode,time,y,options);
+% % [t,y] = ode15s(@quadrotor_ode,time,y,options);
+% [t,y] = ode15s(@quadrotor_ode,time,y,options);
 
-% calculate switching and max times for optimal control of altitude
-% global ts tmax
-% [ts,tmax] = fast_z(10,0)
-% ts = .2415
-% tmax = 1.02709
+%% RUN SIMULATION WITH OBSERVER
+% 1x12 array of state observer pole locations
+C_sys = zeros(12);
+C_sys(1,1) = 1;
+C_sys(2,2) = 1;
+C_sys(3,3) = 1;
+C_sys(7,7) = 1;
+C_sys(8,8) = 1;
+C_sys(9,9) = 1;
+obs_pole_loc = [-11 -12 -13 -14 -15 -16 -17 -18 -19 -20 -21 -22];
+% l0 = place(A',C_sys,obs_pole_loc)';
+l0 = -place(A',C_sys,obs_pole_loc)';
 
 time = [0, sim_time];
 % options = odeset('RelTol',1e-5,'AbsTol',1e-5,'Stats','on','MaxStep',.001);
 options = odeset('RelTol',1e-5,'AbsTol',1e-5,'Stats','on');
 % [t,y] = ode45(@quadrotor_ode,time,y,options);
 % [t,y] = ode15s(@quadrotor_ode,time,y,options);
-[t,y] = ode15s(@quadrotor_ode,time,y,options);
-
-% time = [0, double(tmax)];
-% options = odeset('RelTol',1e-5,'AbsTol',1e-5,'Stats','on','MaxStep',.001);
-% [t,y] = ode45(@quadrotor_ode,time,y,options);
-% 
-% time = [t(end), sim_time];
-% options = odeset('RelTol',1e-5,'AbsTol',1e-5,'Stats','on');
-% [t2,y2] = ode45(@quadrotor_ode,time,y(end,:),options);
-% 
-% t = [t(1:end-1);t2];
-% y = [y(1:end-1,:);y2];
+[t,y] = ode15s(@ode_observer,time,[y y],options);
 
 %% LINEAR INTERPOLATION TO FIXED TIME STEP TO REDUCE PLOTTING TIME
 time_step = 0.05;

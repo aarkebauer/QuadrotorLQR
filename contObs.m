@@ -1,3 +1,8 @@
+% Determines whether an input system described as (A,B,C) is controllable and/or observable
+% A. Arkebauer, D. Cody
+% EENG 436 Final Project
+% 12/4/16
+
 function contObs(A,B,C)
 
 %% Controllability

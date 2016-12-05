@@ -4,10 +4,10 @@
 % A. Arkebauer, D. Cody
 % October 25, 2016
 
-function [dy] = quadrotor_ode(t,y)
+function [dy] = ode_observer(t,y)
 
 global T Tmax ts tmax m g M Ax Ay Az C J w1 w2 w3 w4 l k b Ixx Iyy Izz ...
-    R_cost Q_cost B P A ...
+    R_cost Q_cost B P A l0 C_sys...
     w1_store w2_store w3_store w4_store t_store ...
     phi_store theta_store psi_store
 
@@ -31,6 +31,10 @@ psi_dot = y(12)
 
 %% Determine optimal input u = [f_B, tau_x, tau_y, tau_z]';
 state = [y(1),y(3),y(5),y(2),y(4),y(6),y(7),y(9),y(11),y(8),y(10),y(12)]';
+state_observed = y(13:24);
+
+dy(13:24) = (A + l0*C_sys - B*(R_cost\(B')*P))*state_observed - (l0*C_sys*state) + (B*(R_cost\(B')*P)*desired_state(t));
+
 
 % Algebraic Riccati Equation
 % if mod(t,.1) < .001
@@ -38,7 +42,7 @@ state = [y(1),y(3),y(5),y(2),y(4),y(6),y(7),y(9),y(11),y(8),y(10),y(12)]';
 %     P = care(A,B,eye(12));
 % end
 
-u_opt = -(R_cost\(B')*P)*(state - desired_state(t));
+u_opt = -(R_cost\(B')*P)*(state_observed - desired_state(t));
 u_opt = u_opt + [m*g 0 0 0]'; % add the nominal input about which the system has been linearized
 
 omega_opt_squared = M\u_opt;
