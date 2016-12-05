@@ -48,7 +48,6 @@ w2 = min([sqrt(omega_opt_squared(2)),2090]);
 w3 = min([sqrt(omega_opt_squared(3)),2090]);
 w4 = min([sqrt(omega_opt_squared(4)),2090]);
 
-
 if mod(t,.03) < .001
     t
 end
