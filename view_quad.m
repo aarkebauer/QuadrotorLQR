@@ -131,7 +131,7 @@ function view_quad(x,y,z,phi,theta,psi,t_fixed,time_step)
 %             daspect(d);
 %         end
         % update viewpoint
-        az = az+.3;
+        az = az+.1;
         view(az, el);
         
         cla

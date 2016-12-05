@@ -37,12 +37,17 @@ g = 9.81;
 
 sigma = 2;
 mu = 5;
-amp = 100;
+amp = 10;
 
-% "normal dist path" folder (sim time = 11; time step = .02 - set increment of az in view_quad.m to 0.1) - START AT x0=0, y0=0, z0=0
-desired_x_sym(time_sym) = 100*(1/sqrt(2*sigma^2*pi))*exp(-(time_sym-6)^2/(2*sigma^2));
-desired_y_sym(time_sym) = 100*(1/sqrt(2*sigma^2*pi))*exp(-(time_sym-6)^2/(2*sigma^2));
-desired_z_sym(time_sym) = 100*(1/sqrt(2*sigma^2*pi))*exp(-(time_sym-6)^2/(2*sigma^2));
+% "lemniscate of Gerono" folder (sim time = 4*pi; time step = .02 - set increment of az in view_quad.m to 0.1) - START AT x0=0, y0=0, z0=0
+desired_x_sym(time_sym) = amp*sin(.5*time_sym);
+desired_y_sym(time_sym) = amp*sin(.5*time_sym)*cos(.5*time_sym);
+desired_z_sym(time_sym) = 0.01*time_sym;
+
+% % % "normal dist path" folder (sim time = 11; time step = .02 - set increment of az in view_quad.m to 0.1) - START AT x0=0, y0=0, z0=0
+% % desired_x_sym(time_sym) = 100*(1/sqrt(2*sigma^2*pi))*exp(-(time_sym-6)^2/(2*sigma^2));
+% % desired_y_sym(time_sym) = 100*(1/sqrt(2*sigma^2*pi))*exp(-(time_sym-6)^2/(2*sigma^2));
+% % desired_z_sym(time_sym) = 100*(1/sqrt(2*sigma^2*pi))*exp(-(time_sym-6)^2/(2*sigma^2));
 
 % % % "with state observer" folder (sim time = 40; time step = .1) - START AT x0=0, y0=0, z0=0
 % % desired_y_sym(time_sym) = 6*sin(time_sym/5);
@@ -73,7 +78,7 @@ Q_cost(9,9) = 10; % psi
 linewidth = 1.5;
 
 
-sim_time = 11; % simulation runtime in seconds
+sim_time = 4*pi; % simulation runtime in seconds
 time_step = .02; % time increment for plotting
 
 animation_select = 0; % 0: no animation; 1: full motion, one central thrust vector
@@ -365,6 +370,24 @@ grid on
 title('Motor Angular Velocities vs. Time')
 xlabel('time (s)')
 ylabel('angular velocity (rad/sec)')
+
+
+% %% Plot desired vs. actual position
+% figure('units','normalized','outerposition',[0 0 1 1])
+% 
+% plot3(x,y_plt,z, 'LineWidth', linewidth) % x & y & z
+% hold on
+% plot3(desired_x(t_fixed),desired_y(t_fixed), desired_z(t_fixed), 'LineWidth', linewidth) % desired x & y & z
+% % max_x = max([x,desired_x(t_fixed)]);
+% % min_x = min([x,desired_x(t_fixed)]);
+% % axis([0, max(t_fixed), min_x-1,max_x+1]);
+% zlim([-2 2])
+% legend('Actual Trajectory', 'Desired Trajectory')
+% grid on
+% title('Position')
+% xlabel('x position (m)')
+% ylabel('y position (m)')
+% zlabel('z position (m)')
 
 %% Animation and gif creation
     view_quad(x,y_plt,z,phi,theta,psi,t_fixed,time_step)
