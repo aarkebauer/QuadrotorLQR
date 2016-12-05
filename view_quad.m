@@ -138,7 +138,7 @@ function view_quad(x,y,z,phi,theta,psi,t_fixed,time_step)
         
         % plot desired trajectory
         % plot point if desired trajectory is to move to a point, otherwise plot trajectory as a line
-        if desired_x(t_fixed(end)) ~= desired_x(t_fixed(1))
+        if desired_x(t_fixed(round(length(t_fixed)/2))) ~= desired_x(t_fixed(1))
             plot3(desired_x(t_fixed),desired_y(t_fixed),desired_z(t_fixed), 'r', 'LineWidth', 1.5)
         else
             plot3(desired_x(t_fixed(end)), desired_y(t_fixed(end)), desired_z(t_fixed(end)), 'r*', 'MarkerSize', 14)
@@ -194,12 +194,12 @@ function view_quad(x,y,z,phi,theta,psi,t_fixed,time_step)
         xlabel('x')
         ylabel('y')
         zlabel('z')
-        xlim([-3 3])
-        ylim([-3 3])
-        zlim([-3 11])
-%         xlim(limits)
-%         ylim(limits)
-%         zlim(limits)
+%         xlim([-3 3])
+%         ylim([-3 3])
+%         zlim([-3 11])
+        xlim(limits)
+        ylim(limits)
+        zlim(limits)
         title(['t = ' num2str(t_fixed(ii),'%.3f')])
         drawnow
         

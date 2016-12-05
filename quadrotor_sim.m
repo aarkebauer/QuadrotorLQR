@@ -35,29 +35,29 @@ g = 9.81;
 % desired_z_sym(time_sym) = 10 + 0.*time_sym;
 % sigma = 1.5;
 
-sigma = 3;
+sigma = 2;
 mu = 5;
 amp = 100;
-% desired_y_sym(time_sym) = 10 + 100*(1/sqrt(2*sigma^2*pi))*exp(-(time_sym-50)^2/(2*sigma^2));
-% desired_x_sym(time_sym) = 10 + 100*(1/sqrt(2*sigma^2*pi))*exp(-(time_sym-50)^2/(2*sigma^2));
-% desired_z_sym(time_sym) = amp*(1/sqrt(3*sigma^2*pi))*exp(-(time_sym-8)^2/(3*sigma^2));
 
-%10+ 100*(1/sqrt(2*sigma^2*pi))*exp(-(time_sym-50)^2/(2*sigma^2));
+% % % "normal dist path" folder (sim time = 11; time step = .02 - set increment of az in view_quad.m to 0.1) - START AT x0=0, y0=0, z0=0
+% % desired_x_sym(time_sym) = 100*(1/sqrt(2*sigma^2*pi))*exp(-(time_sym-6)^2/(2*sigma^2));
+% % desired_y_sym(time_sym) = 100*(1/sqrt(2*sigma^2*pi))*exp(-(time_sym-6)^2/(2*sigma^2));
+% % desired_z_sym(time_sym) = 100*(1/sqrt(2*sigma^2*pi))*exp(-(time_sym-6)^2/(2*sigma^2));
 
 % % % "with state observer" folder (sim time = 40; time step = .1) - START AT x0=0, y0=0, z0=0
 % % desired_y_sym(time_sym) = 6*sin(time_sym/5);
 % % desired_x_sym(time_sym) = 6*cos(time_sym/5)*sigmf(time_sym,[2,4]);
 % % desired_z_sym(time_sym) = time_sym/5 + cos(time_sym);
 
-% % % "step to a point" folder (sim time = 7; time step = .03) - START AT x0=0, y0=0, z0=0
-% % desired_x_sym(time_sym) = 3 + 0.0*time_sym;
-% % desired_y_sym(time_sym) = 3 + 0.0*time_sym;
-% % desired_z_sym(time_sym) = 3 + 0.0*time_sym;
+% "step to a point" folder (sim time = 7; time step = .03) - START AT x0=0, y0=0, z0=0
+desired_x_sym(time_sym) = 3 + 0.0*time_sym;
+desired_y_sym(time_sym) = 3 + 0.0*time_sym;
+desired_z_sym(time_sym) = 3 + 0.0*time_sym;
 
-% "spiral" folder (sim time = 8; time step = .1) - START AT x0=1, y0=0, z0=0
-desired_y_sym(time_sym) = sin(2*time_sym);
-desired_x_sym(time_sym) = cos(2*time_sym);
-desired_z_sym(time_sym) = time_sym;
+% % % "spiral" folder (sim time = 8; time step = .1) - START AT x0=1, y0=0, z0=0
+% % desired_y_sym(time_sym) = sin(2*time_sym);
+% % desired_x_sym(time_sym) = cos(2*time_sym);
+% % desired_z_sym(time_sym) = time_sym;
 
 %% LQR cost matrices
 R_cost = eye(4)*.1;
@@ -73,8 +73,8 @@ Q_cost(9,9) = 10; % psi
 linewidth = 1.5;
 
 
-sim_time = 8; % simulation runtime in seconds
-time_step = .1; % time increment for plotting
+sim_time = 11; % simulation runtime in seconds
+time_step = .02; % time increment for plotting
 
 animation_select = 0; % 0: no animation; 1: full motion, one central thrust vector
                       % 2: fixed at origin (only see angular position), one central thrust vector
@@ -120,7 +120,7 @@ Az = 0;
 Tmax = k*4*(2090^2); % max thrust (all 4 motors at full angular velocity ~20000 RMP = 2090 rad/sec)
 
 %% Initial conditions
-x0 = 1;
+x0 = 0;
 x_dot0 = 0;
 
 y0 = 0;
@@ -366,29 +366,5 @@ title('Motor Angular Velocities vs. Time')
 xlabel('time (s)')
 ylabel('angular velocity (rad/sec)')
 
-%% Animation stuff
-% if animation_select == 1
-%     % animate quad motion - view_quad has one thrust vector attached to center
-%     % of mass
+%% Animation and gif creation
     view_quad(x,y_plt,z,phi,theta,psi,t_fixed,time_step)
-% else
-%     if animation_select == 2
-%         
-%         % only view rotation of copter (hold position fixed at origin)
-%         view_quad(zeros(size(y(:,1))),zeros(size(y(:,4))),zeros(size(y(:,7))),y(:,10),y(:,13),y(:,16),t)
-%         
-%         %--------------------------------------------------------------------------
-%     else
-%         if animation_select == 3
-%             % animate quad motion - view_quad has four thrust vectors, attached to each
-%             % of four motors
-%             view_quad2(y(:,1),y(:,4),y(:,7),y(:,10),y(:,13),y(:,16),t)
-%             
-%         else
-%             if animation_select == 4
-%                 % only view rotation of copter (hold position fixed at origin)
-%                 view_quad2(zeros(size(y(:,1))),zeros(size(y(:,4))),zeros(size(y(:,7))),y(:,10),y(:,13),y(:,16),t)
-%             end
-%         end
-%     end
-% end
