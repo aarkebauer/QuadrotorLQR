@@ -44,12 +44,12 @@ amp = 100;
 
 %10+ 100*(1/sqrt(2*sigma^2*pi))*exp(-(time_sym-50)^2/(2*sigma^2));
 
-%   desired_y_sym(time_sym) = 6*sin(time_sym/20);
-% desired_y_sym(time_sym) = 6*cos(time_sym/1.82);
+desired_y_sym(time_sym) = 6*sin(time_sym/20);
+% desired_y_sym(time_sym) = 6*cos(time_sym/20);
 % desired_z_sym(time_sym) = time_sym/5;
-desired_x_sym(time_sym) = 0*time_sym;
- %desired_y_sym(time_sym) = 0.1+0*time_sym;
-desired_y_sym(time_sym) = 0*time_sym;
+%desired_x_sym(time_sym) = 0*time_sym;
+desired_x_sym(time_sym) = 0.1+0*time_sym;
+%desired_y_sym(time_sym) = 0*time_sym;
 % desired_z_sym(time_sym) = 5 + cos(time_sym) + 1*time_sym;
 desired_z_sym(time_sym) = 1+cos(time_sym);
 
@@ -98,7 +98,7 @@ Q_cost(9,9) = 10; % psi
 linewidth = 1.5;
 
 
-sim_time = 15; % simulation runtime in seconds
+sim_time = 100; % simulation runtime in seconds
 
 animation_select = 0; % 0: no animation; 1: full motion, one central thrust vector
                       % 2: fixed at origin (only see angular position), one central thrust vector
