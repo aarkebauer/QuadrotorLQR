@@ -42,7 +42,7 @@ amp = 10;
 % "lemniscate of Gerono" folder (sim time = 4*pi; time step = .02 - set increment of az in view_quad.m to 0.1) - START AT x0=0, y0=0, z0=0
 desired_x_sym(time_sym) = amp*sin(.5*time_sym);
 desired_y_sym(time_sym) = amp*sin(.5*time_sym)*cos(.5*time_sym);
-desired_z_sym(time_sym) = 0.01*time_sym;
+desired_z_sym(time_sym) = 0.0001*time_sym;
 
 % % % "normal dist path" folder (sim time = 11; time step = .02 - set increment of az in view_quad.m to 0.1) - START AT x0=0, y0=0, z0=0
 % % desired_x_sym(time_sym) = 100*(1/sqrt(2*sigma^2*pi))*exp(-(time_sym-6)^2/(2*sigma^2));
@@ -78,8 +78,8 @@ Q_cost(9,9) = 10; % psi
 linewidth = 1.5;
 
 
-sim_time = 4*pi; % simulation runtime in seconds
-time_step = .02; % time increment for plotting
+sim_time = 16*pi; % simulation runtime in seconds
+time_step = .05; % time increment for plotting
 
 animation_select = 0; % 0: no animation; 1: full motion, one central thrust vector
                       % 2: fixed at origin (only see angular position), one central thrust vector
@@ -390,4 +390,7 @@ ylabel('angular velocity (rad/sec)')
 % zlabel('z position (m)')
 
 %% Animation and gif creation
-    view_quad(x,y_plt,z,phi,theta,psi,t_fixed,time_step)
+%     view_quad(x,y_plt,z,phi,theta,psi,t_fixed,time_step)
+    
+% plot 2 quadrotors
+view_2_quads(x,y_plt,z,phi,theta,psi,t_fixed,time_step)
