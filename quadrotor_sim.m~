@@ -19,7 +19,7 @@ global T Tmax m g M Ax Ay Az C J l k b Ixx Iyy Izz w1 w2 w3 w4 ...
     desired_x desired_y desired_z ...
     desired_x_dot desired_y_dot desired_z_dot ...
     desired_x_ddot desired_y_ddot desired_z_ddot ...
-    B R_cost Q_cost P ...
+    B R_cost Q_cost P int_out K_int ...
     phi_store theta_store psi_store ...
     w1_store w2_store w3_store w4_store t_store
 
@@ -44,11 +44,11 @@ amp = 100;
 
 %10+ 100*(1/sqrt(2*sigma^2*pi))*exp(-(time_sym-50)^2/(2*sigma^2));
 
-%   desired_y_sym(time_sym) = 6*sin(time_sym/20);
+% desired_x_sym(time_sym) = 6*sin(time_sym/1.82);
 % desired_y_sym(time_sym) = 6*cos(time_sym/1.82);
 % desired_z_sym(time_sym) = time_sym/5;
 desired_x_sym(time_sym) = 0*time_sym;
- %desired_y_sym(time_sym) = 0.1+0*time_sym;
+% desired_y_sym(time_sym) = 0.1+0*time_sym;
 desired_y_sym(time_sym) = 0*time_sym;
 % desired_z_sym(time_sym) = 5 + cos(time_sym) + 1*time_sym;
 desired_z_sym(time_sym) = 1+cos(time_sym);
@@ -97,15 +97,14 @@ Q_cost(9,9) = 10; % psi
 %% plot settings
 linewidth = 1.5;
 
-
-sim_time = 15; % simulation runtime in seconds
+sim_time = 6; % simulation runtime in seconds
 
 animation_select = 0; % 0: no animation; 1: full motion, one central thrust vector
                       % 2: fixed at origin (only see angular position), one central thrust vector
                       % 3: full motion, four thrust vectors (one for each motor)
                       % 4: fixed at origin (only see angular position), four thrust vectors
 
-%% [!!DEPRECATED!!] rotor angular velocities (rad/s)
+%% [!!DEPRECIATED!!] rotor angular velocities (rad/s)
 % with original settings from 'Modelling and control of quadcopter' (Teppo Luukkonen):
 % wi > 620.61 will cause it to rise
 % rotors 2 and 4 spin in - direction, 1 and 3 in + direction
@@ -243,8 +242,7 @@ time = [0, sim_time];
 % options = odeset('RelTol',1e-5,'AbsTol',1e-5,'Stats','on','MaxStep',.001);
 options = odeset('RelTol',1e-5,'AbsTol',1e-5,'Stats','on');
 % [t,y] = ode45(@quadrotor_ode,time,y,options);
-% [t,y] = ode15s(@quadrotor_ode,time,y,options);
-[t,y] = ode23(@quadrotor_ode,time,y,options);
+[t,y] = ode15s(@quadrotor_ode,time,y,options);
 
 % time = [0, double(tmax)];
 % options = odeset('RelTol',1e-5,'AbsTol',1e-5,'Stats','on','MaxStep',.001);
