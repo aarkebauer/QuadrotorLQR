@@ -122,6 +122,7 @@ function view_quad(x,y,z,phi,theta,psi,t_fixed,time_step)
     limits = vertcat([min(x)-1.1*l,max(x)+1.1*l], [min(y)-1.1*l,max(y)+1.1*l], [min(z)-1,max(z)+1]);
     limits = [min(limits(:,1)), max(limits(:,2))];
     
+    
     size_pos = size(positions); % plot positions for each 'slice' along z-direction of 3D positions matrix
     for ii=1:size_pos(3)
 %         if ii == 1
@@ -193,9 +194,12 @@ function view_quad(x,y,z,phi,theta,psi,t_fixed,time_step)
         xlabel('x')
         ylabel('y')
         zlabel('z')
-        xlim(limits)
-        ylim(limits)
-        zlim(limits)
+        xlim([-3 3])
+        ylim([-3 3])
+        zlim([-3 11])
+%         xlim(limits)
+%         ylim(limits)
+%         zlim(limits)
         title(['t = ' num2str(t_fixed(ii),'%.3f')])
         drawnow
         
