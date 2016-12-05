@@ -54,6 +54,7 @@ amp = 100;
 % % desired_y_sym(time_sym) = 3 + 0.0*time_sym;
 % % desired_z_sym(time_sym) = 3 + 0.0*time_sym;
 
+% "spiral" folder (sim time = 8; time step = .1)
 desired_y_sym(time_sym) = sin(2*time_sym);
 desired_x_sym(time_sym) = cos(2*time_sym);
 desired_z_sym(time_sym) = time_sym;
@@ -73,7 +74,7 @@ linewidth = 1.5;
 
 
 sim_time = 8; % simulation runtime in seconds
-time_step = .1 % time increment for plotting
+time_step = .1; % time increment for plotting
 
 animation_select = 0; % 0: no animation; 1: full motion, one central thrust vector
                       % 2: fixed at origin (only see angular position), one central thrust vector
