@@ -44,17 +44,17 @@ amp = 100;
 
 %10+ 100*(1/sqrt(2*sigma^2*pi))*exp(-(time_sym-50)^2/(2*sigma^2));
 
-% % % "with state observer" folder (sim time = 40; time step = .1)
+% % % "with state observer" folder (sim time = 40; time step = .1) - START AT x0=0, y0=0, z0=0
 % % desired_y_sym(time_sym) = 6*sin(time_sym/5);
 % % desired_x_sym(time_sym) = 6*cos(time_sym/5)*sigmf(time_sym,[2,4]);
 % % desired_z_sym(time_sym) = time_sym/5 + cos(time_sym);
 
-% % % "step to a point" folder (sim time = 7; time step = .03)
+% % % "step to a point" folder (sim time = 7; time step = .03) - START AT x0=0, y0=0, z0=0
 % % desired_x_sym(time_sym) = 3 + 0.0*time_sym;
 % % desired_y_sym(time_sym) = 3 + 0.0*time_sym;
 % % desired_z_sym(time_sym) = 3 + 0.0*time_sym;
 
-% "spiral" folder (sim time = 8; time step = .1)
+% "spiral" folder (sim time = 8; time step = .1) - START AT x0=1, y0=0, z0=0
 desired_y_sym(time_sym) = sin(2*time_sym);
 desired_x_sym(time_sym) = cos(2*time_sym);
 desired_z_sym(time_sym) = time_sym;
@@ -207,7 +207,7 @@ B(12,4) = 1/Izz;
 A = Amat(y(11));
 P = care(A,B,eye(12));
     
-%% RUN SIMULATION WITHOUT OBSERVER
+%% RUN SIMULATION WITHOUT STATE OBSERVER (assume entire state is output)
 % 
 % time = [0, sim_time];
 % % options = odeset('RelTol',1e-5,'AbsTol',1e-5,'Stats','on','MaxStep',.001);
@@ -216,7 +216,7 @@ P = care(A,B,eye(12));
 % % [t,y] = ode15s(@quadrotor_ode,time,y,options);
 % [t,y] = ode15s(@quadrotor_ode,time,y,options);
 
-%% RUN SIMULATION WITH OBSERVER
+%% RUN SIMULATION WITH STATE OBSERVER (assume only x,y,z,phi,theta,psi are output)
 % 1x12 array of state observer pole locations
 C_sys = zeros(12);
 C_sys(1,1) = 1;
